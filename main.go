@@ -4,6 +4,7 @@ import (
 	"log"
 
 	"github.com/gin-gonic/gin"
+	"github.com/intwone/golang-api/src/configuration/logger"
 	"github.com/intwone/golang-api/src/controller/routes"
 	"github.com/joho/godotenv"
 )
@@ -11,7 +12,7 @@ import (
 func main() {
 	err := godotenv.Load()
 	if err != nil {
-		log.Fatal("Error loading .env file")
+		logger.Error("Error loading .env file", err)
 	}
 
 	router := gin.Default()
