@@ -10,13 +10,14 @@ import (
 	"github.com/intwone/golang-api/src/controller/model/request"
 	"github.com/intwone/golang-api/src/model"
 	"github.com/intwone/golang-api/src/util"
+	"github.com/intwone/golang-api/src/view"
 )
 
 var (
 	UserDomainInterface model.UserDomainInterface
 )
 
-func CreateUser(c *gin.Context) {
+func (uc *userControllerInterface) CreateUser(c *gin.Context) {
 	var request request.UserRequest
 
 	err := c.ShouldBindJSON(&request)
@@ -32,14 +33,16 @@ func CreateUser(c *gin.Context) {
 
 	domain := model.NewUserDomain(request.Email, request.Password, request.Name, request.Age)
 
-	domainErr := domain.CreateUser()
+	serviceErr := uc.service.CreateUser(domain)
 
-	if domainErr != nil {
-		message := fmt.Sprintf("error to CreateUser in domain, error = %s", domainErr.Error())
-		logger.Error(message, err, util.CreateJourneyField("CreateUserController"))
-		c.JSON(domainErr.Code, err)
+	if serviceErr != nil {
+		message := fmt.Sprintf("error to CreateUser in service, error = %s", serviceErr.Error())
+		logger.Error(message, serviceErr, util.CreateJourneyField("CreateUserController"))
+		c.JSON(serviceErr.Code, serviceErr)
 		return
 	}
 
-	c.JSON(http.StatusOK, nil)
+	response := view.ConvertDomainToResponse(domain)
+
+	c.JSON(http.StatusOK, response)
 }

@@ -1,40 +1,47 @@
 package model
 
 import (
+	"encoding/json"
+
 	"github.com/intwone/golang-api/src/configuration/logger"
-	"github.com/intwone/golang-api/src/configuration/rest_err"
 	"github.com/intwone/golang-api/src/util"
 )
 
-type UserDomain struct {
+type userDomain struct {
+	Id       string
 	Email    string
 	Password string
 	Name     string
 	Age      int8
 }
 
-type UserDomainInterface interface {
-	CreateUser() *rest_err.RestErr
-	UpdateUser(string) *rest_err.RestErr
-	FindUser(string) (*UserDomain, *rest_err.RestErr)
-	DeleteUser(string) *rest_err.RestErr
+func (ud *userDomain) GetEmail() string {
+	return ud.Email
 }
 
-func NewUserDomain(email string, password string, name string, age int8) UserDomainInterface {
-	return &UserDomain{
-		Email:    email,
-		Password: password,
-		Name:     name,
-		Age:      age,
-	}
+func (ud *userDomain) GetPassword() string {
+	return ud.Password
 }
 
-func (ud *UserDomain) EncryptPassword() {
-	hashedPassword, err := util.HashPassword(ud.Password)
+func (ud *userDomain) GetName() string {
+	return ud.Name
+}
+
+func (ud *userDomain) GetAge() int8 {
+	return ud.Age
+}
+
+func (ud *userDomain) SetId(id string) {
+	ud.Id = id
+}
+
+func (ud *userDomain) GetJSONValue() (string, error) {
+	json, err := json.Marshal(ud)
 
 	if err != nil {
-		logger.Error("error during generate hash to password", err, util.CreateJourneyField("UserDomain"))
+		logger.Error("error during to marshal json", err, util.CreateJourneyField("UserDomain"))
+		return "", err
 	}
 
-	ud.Password = hashedPassword
+	return string(json), nil
 }
