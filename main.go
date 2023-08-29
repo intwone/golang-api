@@ -8,13 +8,17 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/intwone/golang-api/src/configuration/database/mongodb"
 	"github.com/intwone/golang-api/src/configuration/logger"
+	"github.com/intwone/golang-api/src/controller"
 	"github.com/intwone/golang-api/src/controller/routes"
+	"github.com/intwone/golang-api/src/model/repository"
+	"github.com/intwone/golang-api/src/model/service"
 	"github.com/intwone/golang-api/src/util"
 	"github.com/joho/godotenv"
 )
 
 func main() {
 	err := godotenv.Load()
+
 	if err != nil {
 		logger.Error("Error loading .env file", err)
 	}
@@ -27,7 +31,9 @@ func main() {
 		return
 	}
 
-	userController := initDependencies(database)
+	repository := repository.NewUserRepository(database)
+	service := service.NewUserDomainService(repository)
+	userController := controller.NewUserControllerInterface(service)
 
 	router := gin.Default()
 	routes.InitRoutes(&router.RouterGroup, userController)

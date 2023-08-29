@@ -5,16 +5,14 @@ import (
 
 	"github.com/intwone/golang-api/src/configuration/rest_err"
 	"github.com/intwone/golang-api/src/model"
+	"github.com/intwone/golang-api/src/model/repository/entity/converter"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
 func (ur *userRepository) CreateUser(userDomain model.UserDomainInterface) (model.UserDomainInterface, *rest_err.RestErr) {
 	collection := ur.database.Collection("users")
 
-	value, stringfyErr := userDomain.GetJSONValue()
-
-	if stringfyErr != nil {
-		return nil, rest_err.NewInternalServerError(stringfyErr.Error())
-	}
+	value := converter.ConverterDomainToEntity(userDomain)
 
 	result, insertErr := collection.InsertOne(context.Background(), value)
 
@@ -22,7 +20,7 @@ func (ur *userRepository) CreateUser(userDomain model.UserDomainInterface) (mode
 		return nil, rest_err.NewInternalServerError(insertErr.Error())
 	}
 
-	userDomain.SetId(result.InsertedID.(string))
+	value.Id = result.InsertedID.(primitive.ObjectID)
 
-	return userDomain, nil
+	return *converter.ConverterEntityToDomain(*value), nil
 }

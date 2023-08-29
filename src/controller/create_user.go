@@ -33,7 +33,7 @@ func (uc *userControllerInterface) CreateUser(c *gin.Context) {
 
 	domain := model.NewUserDomain(request.Email, request.Password, request.Name, request.Age)
 
-	serviceErr := uc.service.CreateUser(domain)
+	domainResult, serviceErr := uc.service.CreateUser(domain)
 
 	if serviceErr != nil {
 		message := fmt.Sprintf("error to CreateUser in service, error = %s", serviceErr.Error())
@@ -42,7 +42,7 @@ func (uc *userControllerInterface) CreateUser(c *gin.Context) {
 		return
 	}
 
-	response := view.ConvertDomainToResponse(domain)
+	response := view.ConvertDomainToResponse(domainResult)
 
 	c.JSON(http.StatusOK, response)
 }

@@ -1,47 +1,33 @@
 package model
 
-import (
-	"encoding/json"
-
-	"github.com/intwone/golang-api/src/configuration/logger"
-	"github.com/intwone/golang-api/src/util"
-)
-
 type userDomain struct {
-	Id       string
-	Email    string
-	Password string
-	Name     string
-	Age      int8
+	id       string
+	email    string
+	password string
+	name     string
+	age      int8
 }
 
 func (ud *userDomain) GetEmail() string {
-	return ud.Email
+	return ud.email
 }
 
 func (ud *userDomain) GetPassword() string {
-	return ud.Password
+	return ud.password
 }
 
 func (ud *userDomain) GetName() string {
-	return ud.Name
+	return ud.name
 }
 
 func (ud *userDomain) GetAge() int8 {
-	return ud.Age
+	return ud.age
 }
 
 func (ud *userDomain) SetId(id string) {
-	ud.Id = id
+	ud.id = id
 }
 
-func (ud *userDomain) GetJSONValue() (string, error) {
-	json, err := json.Marshal(ud)
-
-	if err != nil {
-		logger.Error("error during to marshal json", err, util.CreateJourneyField("UserDomain"))
-		return "", err
-	}
-
-	return string(json), nil
+func (ud *userDomain) GetId() string {
+	return ud.id
 }

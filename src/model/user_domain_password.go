@@ -6,11 +6,11 @@ import (
 )
 
 func (ud *userDomain) EncryptPassword() {
-	hashedPassword, err := util.HashPassword(ud.Password)
+	hashedPassword, err := util.HashPassword(ud.password)
 
 	if err != nil {
 		logger.Error("error during generate hash to password", err, util.CreateJourneyField("UserDomain"))
 	}
 
-	ud.Password = hashedPassword
+	ud.password = hashedPassword
 }
