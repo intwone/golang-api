@@ -44,5 +44,5 @@ func (uc *userControllerInterface) CreateUser(c *gin.Context) {
 
 	response := view.ConvertDomainToResponse(domainResult)
 
-	c.JSON(http.StatusOK, response)
+	c.JSON(http.StatusCreated, response)
 }

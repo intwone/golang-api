@@ -8,6 +8,8 @@ import (
 
 type UserRepositoryInterface interface {
 	CreateUser(userDomain model.UserDomainInterface) (model.UserDomainInterface, *rest_err.RestErr)
+	FindUserByEmail(email string) (model.UserDomainInterface, *rest_err.RestErr)
+	FindUserById(id string) (model.UserDomainInterface, *rest_err.RestErr)
 }
 
 type userRepository struct {

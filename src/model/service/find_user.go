@@ -5,6 +5,11 @@ import (
 	"github.com/intwone/golang-api/src/model"
 )
 
-func (*userDomainService) FindUser(id string) (*model.UserDomainInterface, *rest_err.RestErr) {
-	return nil, nil
+func (ud *userDomainService) FindUserById(id string) (model.UserDomainInterface, *rest_err.RestErr) {
+	return ud.repository.FindUserById(id)
+
+}
+
+func (ud *userDomainService) FindUserByEmail(email string) (model.UserDomainInterface, *rest_err.RestErr) {
+	return ud.repository.FindUserByEmail(email)
 }
