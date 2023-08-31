@@ -6,6 +6,12 @@ import (
 )
 
 func (ud *userDomainService) CreateUser(userDomain model.UserDomainInterface) (model.UserDomainInterface, *rest_err.RestErr) {
+	user, _ := ud.FindUserByEmail(userDomain.GetEmail())
+
+	if user != nil {
+		return nil, rest_err.NewBadRequestError("email already taken")
+	}
+
 	userDomain.EncryptPassword()
 
 	userDomainRepository, err := ud.repository.CreateUser(userDomain)
