@@ -7,7 +7,6 @@ import (
 
 func (ud *userDomainService) FindUserById(id string) (model.UserDomainInterface, *rest_err.RestErr) {
 	return ud.repository.FindUserById(id)
-
 }
 
 func (ud *userDomainService) FindUserByEmail(email string) (model.UserDomainInterface, *rest_err.RestErr) {

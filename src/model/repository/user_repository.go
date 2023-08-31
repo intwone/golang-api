@@ -32,7 +32,7 @@ func (ur *userRepository) CreateUser(userDomain model.UserDomainInterface) (mode
 }
 
 func (ur *userRepository) FindUserByEmail(email string) (model.UserDomainInterface, *rest_err.RestErr) {
-	collection := ur.database.Collection("user")
+	collection := ur.database.Collection("users")
 
 	userEntity := &entity.UserEntity{}
 
@@ -56,11 +56,13 @@ func (ur *userRepository) FindUserByEmail(email string) (model.UserDomainInterfa
 }
 
 func (ur *userRepository) FindUserById(id string) (model.UserDomainInterface, *rest_err.RestErr) {
-	collection := ur.database.Collection("user")
+	collection := ur.database.Collection("users")
 
 	userEntity := &entity.UserEntity{}
 
-	filter := bson.D{{Key: "_id", Value: id}}
+	objectId, _ := primitive.ObjectIDFromHex(id)
+
+	filter := bson.D{{Key: "_id", Value: objectId}}
 
 	err := collection.FindOne(context.Background(), filter).Decode(userEntity)
 
@@ -77,4 +79,39 @@ func (ur *userRepository) FindUserById(id string) (model.UserDomainInterface, *r
 	}
 
 	return *converter.ConverterEntityToDomain(*userEntity), nil
+}
+
+func (ur *userRepository) UpdateUser(id string, userDomain model.UserDomainInterface) *rest_err.RestErr {
+	collection := ur.database.Collection("users")
+
+	value := converter.ConverterDomainToEntity(userDomain)
+
+	userIdHex, _ := primitive.ObjectIDFromHex(id)
+
+	filter := bson.D{{Key: "_id", Value: userIdHex}}
+	update := bson.D{{Key: "$set", Value: value}}
+
+	_, err := collection.UpdateOne(context.Background(), filter, update)
+
+	if err != nil {
+		return rest_err.NewInternalServerError(err.Error())
+	}
+
+	return nil
+}
+
+func (ur *userRepository) DeleteUser(id string) *rest_err.RestErr {
+	collection := ur.database.Collection("users")
+
+	userIdHex, _ := primitive.ObjectIDFromHex(id)
+
+	filter := bson.D{{Key: "_id", Value: userIdHex}}
+
+	_, err := collection.DeleteOne(context.Background(), filter)
+
+	if err != nil {
+		return rest_err.NewInternalServerError(err.Error())
+	}
+
+	return nil
 }

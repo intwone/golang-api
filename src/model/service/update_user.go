@@ -5,6 +5,12 @@ import (
 	"github.com/intwone/golang-api/src/model"
 )
 
-func (*userDomainService) UpdateUser(id string, userDomain model.UserDomainInterface) *rest_err.RestErr {
+func (ud *userDomainService) UpdateUser(id string, userDomain model.UserDomainInterface) *rest_err.RestErr {
+	err := ud.repository.UpdateUser(id, userDomain)
+
+	if err != nil {
+		return err
+	}
+
 	return nil
 }
