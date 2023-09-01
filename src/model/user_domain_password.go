@@ -14,3 +14,9 @@ func (ud *userDomain) EncryptPassword() {
 
 	ud.password = hashedPassword
 }
+
+func (ud *userDomain) ComparePassword(password string, hashedPassword string) bool {
+	compare := util.ComparePassword(password, hashedPassword)
+
+	return compare
+}

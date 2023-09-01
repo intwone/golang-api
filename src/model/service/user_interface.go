@@ -12,6 +12,7 @@ type UserDomainService interface {
 	FindUserByEmail(string) (model.UserDomainInterface, *rest_err.RestErr)
 	FindUserById(string) (model.UserDomainInterface, *rest_err.RestErr)
 	DeleteUser(string) *rest_err.RestErr
+	SignInUser(model.UserDomainInterface) (model.UserDomainInterface, *rest_err.RestErr)
 }
 
 type userDomainService struct {

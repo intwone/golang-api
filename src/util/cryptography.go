@@ -15,3 +15,14 @@ func HashPassword(password string) (string, error) {
 
 	return string(hashedPassword), nil
 }
+
+func ComparePassword(password string, hashedPassword string) bool {
+	err := bcrypt.CompareHashAndPassword([]byte(hashedPassword), []byte(password))
+
+	if err != nil {
+		logger.Error("error during compare password", err, CreateJourneyField("ComparePassword"))
+		return false
+	}
+
+	return true
+}

@@ -8,8 +8,8 @@ import (
 func ConverterEntityToDomain(entity entity.UserEntity) *model.UserDomainInterface {
 	domain := model.NewUserDomain(
 		entity.Email,
-		entity.Name,
 		entity.Password,
+		entity.Name,
 		entity.Age,
 	)
 
