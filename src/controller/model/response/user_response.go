@@ -6,3 +6,7 @@ type UserResponse struct {
 	Name  string `json:"name"`
 	Age   int8   `json:"age"`
 }
+
+type TokenResponse struct {
+	Token string `json:"token"`
+}

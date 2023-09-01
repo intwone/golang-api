@@ -1,5 +1,7 @@
 package model
 
+import "github.com/intwone/golang-api/src/configuration/rest_err"
+
 type UserDomainInterface interface {
 	GetId() string
 	GetEmail() string
@@ -9,6 +11,7 @@ type UserDomainInterface interface {
 	SetId(string)
 	EncryptPassword()
 	ComparePassword(password string, hashedPassword string) bool
+	GenerateToken() (string, *rest_err.RestErr)
 }
 
 func NewUserDomain(email string, password string, name string, age int8) UserDomainInterface {
